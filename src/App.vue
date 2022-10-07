@@ -5,17 +5,9 @@ import HelloWorld from "./components/HelloWorld.vue";
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
     <nav>
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/activities">Activities</RouterLink>
     </nav>
   </header>
 
@@ -28,11 +20,6 @@ header {
   max-height: 100vh;
   max-width:  400px;
   min-width: 200px;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
 }
 
 nav {
@@ -59,10 +46,6 @@ nav a:first-of-type {
     display: flex;
     flex-direction: column;
     padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 
   nav {

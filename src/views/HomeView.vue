@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheBudget from "../components/TheBudget.vue";
+import TheBalance from "../components/TheBalance.vue";
 </script>
 
 <template>
   <main>
-    <TheBudget />
+    <TheBalance />
   </main>
 </template>
