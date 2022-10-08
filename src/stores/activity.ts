@@ -35,12 +35,12 @@ export const useActivityStore = defineStore("activities", {
             const uselessPoints = this.uselessActivities.reduce((sum: number, activity: Activity) => sum + activity.value * activity.duration, 0);
             
             return usefulPoints - uselessPoints;
-        } 
+        }
     },
     actions: {
-        fetchPredefinedActivities() {
-            this.activities.push(new Activity('Programming', 2, 0, ));
-        },
+        // fetchPredefinedActivities() {
+        //     this.activities.push(new Activity('Programming', 2, 0, ));
+        // },
 
         addActivity(activity: Activity) {
             this.activities.push(activity);
