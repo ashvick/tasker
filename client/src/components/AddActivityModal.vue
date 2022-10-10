@@ -17,7 +17,7 @@ const props = defineProps({
 
 const emit = defineEmits(['confirm', 'hide'])
 
-let inputData: Ref<ActivityInputData> = ref({} as ActivityInputData);
+const inputData: Ref<ActivityInputData> = ref({} as ActivityInputData);
 
 function handleClick() {
     emit('confirm', inputData.value);
@@ -56,7 +56,7 @@ function clearInputData() {
                     :min="0"
                 />
             </div>
-            
+
             <Button
                 label="Confirm"
                 icon="pi pi-plus"

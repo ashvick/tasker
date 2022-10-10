@@ -25,7 +25,6 @@ a,
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
+    width: 100vw;
   }
 }

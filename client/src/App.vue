@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 
+fetch('/api/test')
+  .then((response) => {
+    console.log(response);
+  });
 </script>
 
 <template>
   <header>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/activities">Activities</RouterLink>
+      <div>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/activities">Activities</RouterLink>
+      </div>
+      <div class="auth">
+        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/login">Login</RouterLink>
+      </div>
     </nav>
   </header>
 
@@ -24,11 +34,9 @@ header {
 
 nav {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  font-size: 1.2rem;
 }
 
 nav a {
@@ -49,12 +57,8 @@ nav a:first-of-type {
   }
 
   nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+    width: 100vw;
+    padding: 1rem;
   }
 }
 </style>

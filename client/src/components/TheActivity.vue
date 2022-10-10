@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Activity } from '@/stores/activity';
+import Card from "primevue/card";
 
 defineProps<{
   activity: Activity;
@@ -13,7 +14,7 @@ const emit = defineEmits(['delete'])
     <template #title>
       <div class="title">
         <span>{{ activity.title }}</span>
-        <i class="pi pi-times" @click="emit('delete', activity.id)"></i>
+        <i class="close-icon pi pi-times" @click="emit('delete', activity.id)"></i>
       </div>
     </template>
     <template #content>
@@ -30,6 +31,11 @@ const emit = defineEmits(['delete'])
     display: flex;
     justify-content: space-between;
   }
+
+  .close-icon {
+    cursor: pointer;
+  }
+
   .content {
       display: block;
   }

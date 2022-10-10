@@ -27,7 +27,7 @@ function handleModalConfirmation(input: ActivityInputData) {
 </script>
 
 <template>
-  <div class="budget">
+  <div class="balance">
     <div class="column-useful">
       <ActivityColumn header="Useful activities" :activities="activityStore.usefulActivities" />
       <Button
@@ -37,7 +37,10 @@ function handleModalConfirmation(input: ActivityInputData) {
         @click="clickHandler(true)"
       />
     </div>
-    <TheOutcome :value="activityStore.outcome" />
+    <div>
+      <h3 class="date">{{ new Date(Date.now()).toLocaleDateString() }}</h3>
+      <TheOutcome class="outcome" :value="activityStore.outcome" />
+    </div>
     <div class="column-useless">
       <ActivityColumn header="Useless activities" :activities="activityStore.uselessActivities" />
       <Button
@@ -52,8 +55,20 @@ function handleModalConfirmation(input: ActivityInputData) {
 </template>
 
 <style scoped>
-.budget {
+.balance {
   display: flex;
+  justify-content: space-between;
   padding: 2rem;
+}
+.column-useless {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.date {
+  text-align: center;
+}
+.outcome {
+  margin-top: 2rem;
 }
 </style>

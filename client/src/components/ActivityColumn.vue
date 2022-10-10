@@ -4,7 +4,7 @@ import { Activity, useActivityStore } from '../stores/activity';
 
 const props = defineProps<{
   header: string,
-  activities: Activity[]
+  activities: Activity[],
 }>()
 
 const activityStore = useActivityStore();
@@ -12,12 +12,11 @@ const activityStore = useActivityStore();
 function deleteActivity(id: string) {
   activityStore.deleteActivity(id);
 }
-
 </script>
 
 <template>
   <div class="column">
-    <div class="column-header">{{ header }}</div>
+    <h3 class="column-header">{{ header }}</h3>
     <div class="activities">
       <TheActivity v-for="activity in activities" :activity="activity" @delete="deleteActivity"/>
     </div>
@@ -28,7 +27,12 @@ function deleteActivity(id: string) {
 .column {
   display: flex;
   flex-direction: column;
+  width: 320px;
   gap: 14px;
+}
+
+.column-header {
+  text-align: center;
 }
 
 .activities {
