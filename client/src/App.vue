@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import { useAuthStore } from "./stores/auth.store";
 
-fetch('/api/test')
-  .then((response) => {
-    console.log(response);
-  });
+const authStore = useAuthStore();
 </script>
 
 <template>
   <header>
-    <nav>
+    <nav v-if="authStore.user">
       <div>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/balance">Balance</RouterLink>
         <RouterLink to="/activities">Activities</RouterLink>
       </div>
-      <div class="auth">
+      <a @click="authStore.logout">Logout</a>
+    </nav>
+    <nav v-else>
+      <RouterLink to="/">Home</RouterLink>
+      <div>
         <RouterLink to="/register">Register</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
       </div>
@@ -47,6 +49,10 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+a {
+  cursor: pointer;
 }
 
 @media (min-width: 1024px) {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TheActivity from "./TheActivity.vue";
-import { Activity, useActivityStore } from '../stores/activity';
+import { type Activity, useActivityStore } from '../stores/activity.store';
 
 const props = defineProps<{
   header: string,

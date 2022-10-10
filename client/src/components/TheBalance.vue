@@ -1,27 +1,35 @@
 <script setup lang="ts">
 import ActivityColumn from "./ActivityColumn.vue";
 import Button from "primevue/button";
+import Calendar from 'primevue/calendar';
 import TheOutcome from "./TheOutcome.vue";
-import AddActivityModal, { type ActivityInputData } from "./AddActivityModal.vue";
-import { Activity, useActivityStore } from '../stores/activity';
+import AddActivityModal from "./AddActivityModal.vue";
+import { useActivityStore, type Activity } from '../stores/activity.store';
 import { ref } from "vue";
 
-const showModal = ref(false);
-const addUseful = ref();
+const showModal   = ref(false);
+const isAddUseful = ref();
+const date        = ref(new Date(Date.now()));
 
 const activityStore = useActivityStore();
 
-function clickHandler(useful: boolean) {
-  showModal.value = true;
-  addUseful.value = useful;
+activityStore.getActivities(date.value);
+
+function dateSelect(date: Date) {
+  activityStore.getActivities(date);
 }
 
-function handleModalConfirmation(input: ActivityInputData) {
-  showModal.value = false;
+function clickHandler(useful: boolean) {
+  showModal.value   = true;
+  isAddUseful.value = useful;
+}
 
-  const activity = new Activity(input.title, input.value, input.duration, addUseful.value);
+function handleModalConfirmation(inputData: Partial<Activity>) {
+  showModal.value  = false;
+  inputData.useful = isAddUseful.value;
+  inputData.date   = date.value;
 
-  activityStore.addActivity(activity);
+  activityStore.addActivity(inputData);
 }
 
 </script>
@@ -37,8 +45,8 @@ function handleModalConfirmation(input: ActivityInputData) {
         @click="clickHandler(true)"
       />
     </div>
-    <div>
-      <h3 class="date">{{ new Date(Date.now()).toLocaleDateString() }}</h3>
+    <div class="balance-container">
+      <Calendar v-model="date" @date-select="dateSelect" />
       <TheOutcome class="outcome" :value="activityStore.outcome" />
     </div>
     <div class="column-useless">
@@ -64,6 +72,11 @@ function handleModalConfirmation(input: ActivityInputData) {
   display: flex;
   flex-direction: column;
   align-items: end;
+}
+.balance-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .date {
   text-align: center;

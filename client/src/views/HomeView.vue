@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import TheBalance from "../components/TheBalance.vue";
 </script>
 
 <template>
   <main>
-    <TheBalance />
+    This is home page
   </main>
 </template>

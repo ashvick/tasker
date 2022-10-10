@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
+import { useAuthStore } from "@/stores/auth.store";
 import Button from "primevue/button";
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -15,28 +16,10 @@ const inputData: LoginInputData = reactive({
   password: '',
 });
 
-function handleClick() {
-  const user = {
-    username: inputData.username,
-    password: inputData.password,
-  }
+const authStore = useAuthStore();
 
-  fetch('/api/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-    .then(res => res.json())
-    .then(data => {
-      localStorage.setItem('accessToken', data.token);
-    })
-    .catch(err => console.log(err));
-
-  function useEffect() {
-
-  }
+function handleSubmit() {
+  authStore.login(inputData.username, inputData.password);
 }
 
 </script>
@@ -54,11 +37,12 @@ function handleClick() {
         </div>
 
         <Button
-            label="Login"
+            label="Submit"
             icon="pi pi-plus"
             class="button p-button-success p-button p-button-sm"
-            @click="handleClick"
+            @click="handleSubmit"
         />
+        <RouterLink to="/register">Create account</RouterLink>
     </div>
   </main>
 </template>

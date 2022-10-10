@@ -1,29 +1,54 @@
 const router = require('express').Router();
+const authenticateToken = require('../middlewares/auth.middleware');
 let Activity = require('../models/activity.model');
 
-router.route('/').get((req, res) => {
-    Activity.find()
+router.use(authenticateToken);
+
+router.route('/').get(async (req, res) => {
+    Activity.find({ userId: req.user.id })
         .then(activities => res.json(activities))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => res.status(500).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
-    const username = req.body.username;
+router.route('/add').post(async (req, res) => {
+    const userId   = req.user.id;
     const title    = req.body.title;
     const value    = Number(req.body.value);
     const duration = Number(req.body.duration);
-    const date     = Date.parse(req.body.date);
+    const useful   = Boolean(req.body.useful);
+    const date     = new Date(req.body.date);
 
     const newActivity = new Activity({
-        username,
+        userId,
         title,
         value,
         duration,
+        useful,
         date,
     });
 
-    newActivity.save()
-        .then(() => res.json('Activity added!'))
+    try {
+        const activity = await newActivity.save();
+        if (!activity) throw new Error('Something went wrong saving the Activity');
+        res.status(200).json(activity);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+});
+
+router.route('/:date').get((req, res) => {
+    console.log(req.params);
+    const date = new Date(req.params.date);
+    const [endDate]   = new Date(date.setDate(date.getDate() + 1)).toISOString().split('T');
+    Activity.find({
+        userId: req.user.id,
+        date: {
+            $gte: req.params.date,
+            $lt: endDate,
+        }
+    })
+        .then(activities => res.json(activities))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 

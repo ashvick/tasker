@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Activity } from '@/stores/activity';
+import type { Activity } from '@/stores/activity.store';
 import Card from "primevue/card";
 
 defineProps<{
@@ -14,7 +14,7 @@ const emit = defineEmits(['delete'])
     <template #title>
       <div class="title">
         <span>{{ activity.title }}</span>
-        <i class="close-icon pi pi-times" @click="emit('delete', activity.id)"></i>
+        <i class="close-icon pi pi-times" @click="emit('delete', activity._id)"></i>
       </div>
     </template>
     <template #content>

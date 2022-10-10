@@ -3,13 +3,8 @@ import Button from "primevue/button";
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
-import { ref, type Ref } from "vue";
-
-export interface ActivityInputData {
-    title: string,
-    value: number,
-    duration: number,
-}
+import { reactive } from "vue";
+import { useActivityStore, type Activity } from "@/stores/activity.store";
 
 const props = defineProps({
   visible: {type: Boolean, default: false },
@@ -17,18 +12,20 @@ const props = defineProps({
 
 const emit = defineEmits(['confirm', 'hide'])
 
-const inputData: Ref<ActivityInputData> = ref({} as ActivityInputData);
+const state: Partial<Activity> = reactive({
+    title: '',
+    value: 0,
+    duration: 0,
+});
+
+const activityStore = useActivityStore();
 
 function handleClick() {
-    emit('confirm', inputData.value);
+    emit('confirm', state);
 
-    inputData.value.title    = '';
-    inputData.value.value    = 0;
-    inputData.value.duration = 0;
-}
-
-function clearInputData() {
-
+    state.title    = '';
+    state.value    = 0;
+    state.duration = 0;
 }
 
 </script>
@@ -38,17 +35,17 @@ function clearInputData() {
         <div class="input-fields">
             <div class="field">
                 <label for="activity-title">Title</label>
-                <InputText id="activity-title" type="text" v-model="inputData.title" placeholder="Yoga" />
+                <InputText id="activity-title" type="text" v-model="state.title" placeholder="Yoga" />
             </div>
             <div class="field">
                 <label for="activity-value">Value</label>
-                <InputNumber id="activity-value" v-model="inputData.value" mode="decimal" :useGrouping="false" :min="0" />
+                <InputNumber id="activity-value" v-model="state.value" mode="decimal" :useGrouping="false" :min="0" />
             </div>
             <div class="field">
                 <label for="activity-duration">Duration</label>
                 <InputNumber
                     id="activity-duration"
-                    v-model="inputData.duration"
+                    v-model="state.duration"
                     mode="decimal"
                     :useGrouping="false"
                     :minFractionDigits="1"

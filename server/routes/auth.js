@@ -46,12 +46,9 @@ router.route('/login').post((req, res) => {
                                 process.env.JWT_SECRET,
                                 { expiresIn: 360000 },
                                 (err, token) => {
-                                    if (err) return res.json({ message: err });
+                                    if (err) return res.status(400).json({ message: err });
 
-                                    return res.json({
-                                        message: 'Success',
-                                        token: 'Bearer ' + token,
-                                    });
+                                    return res.json({ token });
                                 }
                             )
                         } else {

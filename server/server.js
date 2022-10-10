@@ -26,7 +26,7 @@ const activitiesRouter = require('./routes/activities');
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
-app.use('/api//activities', activitiesRouter);
+app.use('/api/activities', activitiesRouter);
 
 app.get('/api/test', (req, res) => {
     console.log('/test request');

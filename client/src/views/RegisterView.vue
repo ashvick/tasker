@@ -9,6 +9,7 @@ import Divider from 'primevue/divider';
 import Dialog from 'primevue/dialog';
 import Checkbox from 'primevue/checkbox';
 import { reactive, ref, type Ref } from 'vue';
+import { useAuthStore } from '@/stores/auth.store';
 
 const state = reactive({
   name: '',
@@ -29,6 +30,8 @@ const showMessage = ref(false);
 
 const v$ = useVuelidate(rules, state);
 
+const authStore = useAuthStore();
+
 function handleSubmit(isFormValid: boolean) {
     submitted.value = true;
 
@@ -36,18 +39,19 @@ function handleSubmit(isFormValid: boolean) {
         return;
     }
 
-    send();
+    authStore.register(state.name, state.email, state.password)
+        .then(res => toggleDialog());
 }
 
 function toggleDialog() {
     showMessage.value = !showMessage.value;
 
     if(!showMessage.value) {
-        resetForm();
+        resetState();
     }
 }
 
-function resetForm() {
+function resetState() {
     state.name = '';
     state.email = '';
     state.password = '';
