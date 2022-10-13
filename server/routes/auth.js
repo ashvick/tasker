@@ -10,7 +10,7 @@ router.route('/register').post(async (req, res) => {
     const takenEmail = await User.findOne({'username': user.username});
 
     if (takenUsername || takenEmail) {
-        res.status(400).json({ message: 'Username or Email has already been taken' });
+        res.status(200).json({ message: 'Username or Email has already been taken', status: 'rejected' });
     } else {
         user.password = await bcrypt.hash(req.body.password, 10);
 
@@ -31,7 +31,7 @@ router.route('/login').post((req, res) => {
     User.findOne({username: userLoggingIn.username})
         .then(dbUser => {
             if (!dbUser) {
-                return res.status(400).json({message: 'Invalid username or password'});
+                return res.status(200).json({ message: 'Invalid username or password', status: 'rejected' });
             } else {
                 bcrypt.compare(userLoggingIn.password, dbUser.password)
                     .then(isCorrect => {
@@ -46,13 +46,13 @@ router.route('/login').post((req, res) => {
                                 process.env.JWT_SECRET,
                                 { expiresIn: 360000 },
                                 (err, token) => {
-                                    if (err) return res.status(400).json({ message: err });
+                                    if (err) return res.status(403).json({ message: err });
 
                                     return res.json({ token });
                                 }
                             )
                         } else {
-                            res.status(400).json({ message: 'Invalid username or password' });
+                            res.status(200).json({ message: 'Invalid username or password', status: 'rejected' });
                         }
                     });
             }

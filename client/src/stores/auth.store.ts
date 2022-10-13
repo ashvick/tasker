@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', {
     }),
     actions: {
         async register(username: string, email: string, password: string) {
-            return fetchWrapper.post('/api/auth/register', { username, email, password });
+            await fetchWrapper.post('/api/auth/register', { username, email, password });
         },
 
         async login(username: string, password: string) {

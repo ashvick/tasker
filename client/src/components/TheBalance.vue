@@ -3,33 +3,27 @@ import ActivityColumn from "./ActivityColumn.vue";
 import Button from "primevue/button";
 import Calendar from 'primevue/calendar';
 import TheOutcome from "./TheOutcome.vue";
-import AddActivityModal from "./AddActivityModal.vue";
-import { useActivityStore, type Activity } from '../stores/activity.store';
-import { ref } from "vue";
-
-const showModal   = ref(false);
-const isAddUseful = ref();
-const date        = ref(new Date(Date.now()));
+import AddActivityModal from "./ActivityModal.vue";
+import { useActivityStore } from '../stores/activity.store';
+import { useActivityModalStore } from "@/stores/activityModal.store";
 
 const activityStore = useActivityStore();
+const modalStore = useActivityModalStore();
 
-activityStore.getActivities(date.value);
+activityStore.getActivities(activityStore.date);
 
 function dateSelect(date: Date) {
-  activityStore.getActivities(date);
+  const withoutTimeshift = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  activityStore.getActivities(withoutTimeshift);
 }
 
 function clickHandler(useful: boolean) {
-  showModal.value   = true;
-  isAddUseful.value = useful;
-}
-
-function handleModalConfirmation(inputData: Partial<Activity>) {
-  showModal.value  = false;
-  inputData.useful = isAddUseful.value;
-  inputData.date   = date.value;
-
-  activityStore.addActivity(inputData);
+  modalStore.edit = false;
+  modalStore.activityData = {
+    date: activityStore.date,
+    useful: useful,
+  };
+  modalStore.display = true;
 }
 
 </script>
@@ -46,7 +40,7 @@ function handleModalConfirmation(inputData: Partial<Activity>) {
       />
     </div>
     <div class="balance-container">
-      <Calendar v-model="date" @date-select="dateSelect" />
+      <Calendar v-model="activityStore.date" @date-select="dateSelect" dateFormat="dd-mm-yy" />
       <TheOutcome class="outcome" :value="activityStore.outcome" />
     </div>
     <div class="column-useless">
@@ -58,7 +52,7 @@ function handleModalConfirmation(inputData: Partial<Activity>) {
         @click="clickHandler(false)"
       />
     </div>
-    <AddActivityModal :visible="showModal" @confirm="handleModalConfirmation" @hide="showModal=false"/>
+    <AddActivityModal />
   </div>
 </template>
 

@@ -41,6 +41,8 @@ router.route('/:date').get((req, res) => {
     console.log(req.params);
     const date = new Date(req.params.date);
     const [endDate]   = new Date(date.setDate(date.getDate() + 1)).toISOString().split('T');
+    console.log('startDate', req.params.date);
+    console.log('endDate', endDate);
     Activity.find({
         userId: req.user.id,
         date: {
@@ -67,14 +69,14 @@ router.route('/:id').delete((req, res) => {
 router.route('/update/:id').post((req, res) => {
     Activity.findById(req.params.id)
         .then(activity => {
-            activity.username = req.body.username;
             activity.title    = req.body.title;
             activity.value    = Number(req.body.value);
             activity.duration = Number(req.body.duration);
-            activity.date     = Date.parse(req.body.date);
+            activity.useful   = Boolean(req.body.useful);
+            activity.date     = new Date(req.body.date);
 
             activity.save()
-                .then(activity => res.json('Activity updated!'))
+                .then(activity => res.json(activity))
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));

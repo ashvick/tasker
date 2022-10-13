@@ -43,9 +43,6 @@ function handleResponse(response: any) {
     return response.text().then((text: any) => {
         const data = text && JSON.parse(text);
 
-        console.log('handle');
-
-
         if (!response.ok) {
             const { user, logout } = useAuthStore();
             if ([401, 403].includes(response.status) && user) {
@@ -55,6 +52,10 @@ function handleResponse(response: any) {
 
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
+        }
+
+        if ('rejected' === data.status) {
+            return Promise.reject(data.message);
         }
 
         return data;

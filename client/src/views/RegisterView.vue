@@ -5,24 +5,20 @@ import router from "@/router";
 import Button from "primevue/button";
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
-import Divider from 'primevue/divider';
 import Dialog from 'primevue/dialog';
-import Checkbox from 'primevue/checkbox';
 import { reactive, ref, type Ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
 
 const state = reactive({
   name: '',
   email: '',
-  password: '',
-  accept: null,
+  password: ''
 });
 
 const rules = {
     name: { required },
     email: { required, email },
-    password: { required },
-    accept: { required }
+    password: { required }
 };
 
 const submitted = ref(false);
@@ -40,7 +36,8 @@ function handleSubmit(isFormValid: boolean) {
     }
 
     authStore.register(state.name, state.email, state.password)
-        .then(res => toggleDialog());
+        .then(() => toggleDialog())
+        .catch(error => alert(error));
 }
 
 function toggleDialog() {
@@ -55,30 +52,7 @@ function resetState() {
     state.name = '';
     state.email = '';
     state.password = '';
-    state.accept = null;
     submitted.value = false;
-}
-
-function send() {
-  const user = {
-    username: state.name,
-    email: state.email,
-    password: state.password,
-  }
-
-  fetch('/api/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-    .then(res => {
-      if (200 === res.status) {
-        toggleDialog();
-      }
-    })
-    .catch(err => console.log(err));
 }
 
 function handleDialogConfirmation() {
@@ -86,27 +60,23 @@ function handleDialogConfirmation() {
 
     router.push('/login');
 }
-
 </script>
 
 <template>
   <main>
-    <Dialog v-model:visible="showMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
-        <div class="flex align-items-center flex-column pt-6 px-3">
-            <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
-            <h5>Registration Successful!</h5>
-            <p :style="{lineHeight: 1.5, textIndent: '1rem'}">
-                Your account is registered under name <b>{{state.name}}</b> ; it'll be valid next 30 days without activation. Please check <b>{{state.email}}</b> for activation instructions.
-            </p>
+    <Dialog v-model:visible="showMessage" :closable="false" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+        <div class="dialog-content">
+            <i class="pi pi-check-circle" :style="{fontSize: '2rem', color: 'var(--green-500)', marginRight: '1rem'}"></i>
+            <span>Registration successful!<br>Now you will be redirected to login. </span>
         </div>
         <template #footer>
-            <div class="flex justify-content-center">
+            <div>
                 <Button label="OK" @click="handleDialogConfirmation" class="p-button-text" />
             </div>
         </template>
     </Dialog>
     <div class="card">
-      <h5>Register</h5>
+      <h3>Register</h3>
       <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
           <div class="field">
               <div class="p-float-label">
@@ -134,25 +104,10 @@ function handleDialogConfirmation() {
                       <template #header>
                           <h6>Pick a password</h6>
                       </template>
-                      <template #footer="sp">
-                          {{sp.level}}
-                          <Divider />
-                          <p class="mt-2">Suggestions</p>
-                          <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                              <li>At least one lowercase</li>
-                              <li>At least one uppercase</li>
-                              <li>At least one numeric</li>
-                              <li>Minimum 8 characters</li>
-                          </ul>
-                      </template>
                   </Password>
                   <label for="password" :class="{'p-error':v$.password.$invalid && submitted}">Password*</label>
               </div>
               <small v-if="(v$.password.$invalid && submitted) || v$.password.$pending" class="p-error">{{v$.password.required.$message.replace('Value', 'Password')}}</small>
-          </div>
-          <div class="field-checkbox">
-              <Checkbox id="accept" name="accept" value="Accept" v-model="v$.accept.$model" :class="{'p-invalid':v$.accept.$invalid && submitted}" />
-              <label for="accept" :class="{'p-error': v$.accept.$invalid && submitted}">I agree to the terms and conditions*</label>
           </div>
           <Button type="submit" label="Submit" class="button" />
       </form>
@@ -161,31 +116,32 @@ function handleDialogConfirmation() {
 </template>
 
 <style lang='scss' scoped>
-  main {
-    display: flex;
-    justify-content: center;
-    padding-top: 3rem;
-  }
+main {
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+}
 
-  .card {
-      min-width: 450px;
+.dialog-content {
+  display: flex;
+  align-items: center;
+}
 
-      form {
-          margin-top: 2rem;
-      }
+.card {
+  min-width: 450px;
 
-      .field {
-          margin-bottom: 1.5rem;
-      }
-  }
-
-  .button {
+  form {
     margin-top: 2rem;
   }
 
-  @media screen and (max-width: 960px) {
-      .card {
-          width: 80%;
-      }
+  .field {
+    margin-bottom: 1.5rem;
   }
+}
+
+@media screen and (max-width: 960px) {
+  .card {
+    width: 80%;
+  }
+}
 </style>

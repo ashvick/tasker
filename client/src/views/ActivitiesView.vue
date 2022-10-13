@@ -1,10 +1,15 @@
 <script setup lang="ts">
-  import ActivityColumn from "../components/ActivityColumn.vue";
+import { useActivityStore } from "@/stores/activity.store";
+import TheActivity from "../components/TheActivity.vue";
+
+const activityStore = useActivityStore();
+activityStore.getAllActivities();
+
 </script>
 
 <template>
-  <div class="activities">
-    <!-- <ActivityColumn title="Your activities" :activities="[]"/> -->
-  </div>
+  <main class="activities">
+    <TheActivity v-for="activity in activityStore.activities" :activity="activity" :showDate="true"/>
+  </main>
 </template>
 

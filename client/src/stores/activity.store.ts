@@ -2,7 +2,7 @@ import { fetchWrapper } from "@/helpers/fetch-wrapper";
 import { defineStore } from "pinia";
 
 export interface Activity {
-    _id: string;
+    _id?: string;
     title: string;
     value: number;
     duration: number;
@@ -12,6 +12,7 @@ export interface Activity {
 
 export const useActivityStore = defineStore("activities", {
     state: () => ({
+        date: new Date(Date.now()),
         activities: [] as Activity[],
     }),
     getters: {
@@ -28,20 +29,34 @@ export const useActivityStore = defineStore("activities", {
             const uselessPoints = this.uselessActivities.reduce((sum: number, activity: Activity) => sum + activity.value * activity.duration, 0);
 
             return usefulPoints - uselessPoints;
-        }
+        },
     },
     actions: {
+        async getAllActivities() {
+            const activities = await fetchWrapper.get('api/activities/');
+            this.activities = activities.map((activity: Activity) => {
+                activity.date = new Date(activity.date);
+                return activity;
+            });
+        },
+
         async getActivities(date: Date) {
             const [dateISO] = date.toISOString().split('T');
             const activities = await fetchWrapper.get('api/activities/' + dateISO);
-            this.activities = activities;
+            this.activities = activities.map((activity: Activity) => {
+                activity.date = new Date(activity.date);
+                return activity;
+            });
         },
 
-        async addActivity(inputData: any) {
-            console.log(inputData);
-
-            const addedActivity = await fetchWrapper.post('api/activities/add', inputData);
+        async addActivity(activity: Partial<Activity>) {
+            const addedActivity = await fetchWrapper.post('api/activities/add', activity);
+            addedActivity.date = new Date(addedActivity.date);
             this.activities.push(addedActivity);
+        },
+
+        async updateActivity(activity: Partial<Activity>) {
+            const updatedActivity = await fetchWrapper.post('api/activities/update/' + activity._id, activity);
         },
 
         async deleteActivity(id: string) {
