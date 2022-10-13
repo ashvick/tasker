@@ -9,7 +9,7 @@ app.use(cors()) // to allow cross origin requests
 app.use(express.json()) // to convert the request into JSON
 
 mongoose
-    .connect(process.env.MONGO_URI, {
+    .connect(process.env.MONGO_CONNECTION_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
