@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import ActivityColumn from "./ActivityColumn.vue";
 import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import TheOutcome from "./TheOutcome.vue";
 import AddActivityModal from "./ActivityModal.vue";
+import OverlayPanel from "primevue/overlaypanel";
+import Listbox from "primevue/listbox";
 import { useActivityStore } from "@/stores/activity.store";
 import { useActivityModalStore } from "@/stores/activityModal.store";
 
 const activityStore = useActivityStore();
 const modalStore = useActivityModalStore();
+const selectedActivity = ref();
+const isAddUseful = ref();
+const op = ref();
 
 activityStore.getActivities(activityStore.date);
 
@@ -20,11 +26,16 @@ function dateSelect(date: Date) {
   activityStore.getActivities(dateUTC);
 }
 
-function clickHandler(useful: boolean) {
+function clickHandler(event: any, useful: boolean) {
+  isAddUseful.value = useful;
+  op.value.toggle(event);
+}
+
+function createClickHandler() {
   modalStore.edit = false;
   modalStore.activityData = {
     date: activityStore.date,
-    useful: useful,
+    useful: isAddUseful.value,
   };
   modalStore.display = true;
 }
@@ -32,7 +43,21 @@ function clickHandler(useful: boolean) {
 
 <template>
   <div class="balance">
-    <div class="column-useful">
+    <AddActivityModal />
+    <OverlayPanel ref="op">
+      <Listbox
+        v-model="selectedActivity"
+        option-label="title"
+        :options="activityStore.usefulActivities"
+      />
+      <Button
+        label="Create new"
+        icon="pi pi-plus"
+        class="p-button-success p-button-outlined p-button-sm"
+        @click="createClickHandler"
+      />
+    </OverlayPanel>
+    <div class="column-wrapper">
       <ActivityColumn
         header="Useful activities"
         :activities="activityStore.usefulActivities"
@@ -40,8 +65,8 @@ function clickHandler(useful: boolean) {
       <Button
         label="Add"
         icon="pi pi-plus"
-        class="p-button-success p-button-outlined p-button-sm"
-        @click="clickHandler(true)"
+        class="button p-button-success p-button-outlined p-button-sm"
+        @click="clickHandler($event, true)"
       />
     </div>
     <div class="balance-container">
@@ -52,39 +77,53 @@ function clickHandler(useful: boolean) {
       />
       <TheOutcome class="outcome" :value="activityStore.outcome" />
     </div>
-    <div class="column-useless">
+    <div class="column-wrapper">
       <ActivityColumn
         header="Useless activities"
         :activities="activityStore.uselessActivities"
       />
       <Button
+        style="margin-left: auto"
         label="Add"
         icon="pi pi-plus"
-        class="p-button-danger p-button-outlined p-button-sm"
-        @click="clickHandler(false)"
+        class="button p-button-danger p-button-outlined p-button-sm"
+        @click="clickHandler($event, false)"
       />
     </div>
-    <AddActivityModal />
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .balance {
   display: flex;
   justify-content: space-between;
   padding: 2rem;
+
+  @media screen and (max-width: 768px) {
+    flex-wrap: wrap;
+    padding: 0.5em;
+  }
 }
-.column-useless {
+.column-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  flex-basis: 20rem;
+  @media screen and (max-width: 768px) {
+    flex-basis: 48%;
+  }
 }
 .balance-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
+  min-width: 10rem;
+  @media screen and (max-width: 768px) {
+    flex-basis: 100%;
+    order: -1;
+  }
 }
-.outcome {
-  margin-top: 2rem;
+.button {
+  width: 5rem;
 }
 </style>

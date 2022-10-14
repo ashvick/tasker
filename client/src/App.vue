@@ -28,6 +28,9 @@ const authStore = useAuthStore();
 
 <style scoped>
 header {
+  display: flex;
+  flex-direction: column;
+  padding-right: calc(var(--section-gap) / 2);
   line-height: 1.5;
   max-height: 100vh;
   max-width: 400px;
@@ -37,7 +40,8 @@ header {
 nav {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 100vw;
+  padding: 1rem;
   font-size: 1.2rem;
 }
 
@@ -53,18 +57,5 @@ nav a:first-of-type {
 
 a {
   cursor: pointer;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    flex-direction: column;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  nav {
-    width: 100vw;
-    padding: 1rem;
-  }
 }
 </style>

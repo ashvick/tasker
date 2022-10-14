@@ -52,9 +52,9 @@ function dateSelect(date: Date) {
   >
     <div class="input-fields">
       <div class="field">
-        <label for="activity-title">Title</label>
+        <label for="activity-name">Activity name</label>
         <InputText
-          id="activity-title"
+          id="activity-name"
           type="text"
           v-model="modalStore.activityData.title"
           placeholder="Yoga"
@@ -62,18 +62,18 @@ function dateSelect(date: Date) {
         />
       </div>
       <div class="field">
-        <label for="activity-value">Value</label>
+        <label for="activity-value">Value (no more than 5)</label>
         <InputNumber
           id="activity-value"
           v-model="modalStore.activityData.value"
-          mode="decimal"
           :use-grouping="false"
-          :min="0"
+          :min="1"
+          :max="5"
           :style="{ width: '100%' }"
         />
       </div>
       <div class="field">
-        <label for="activity-duration">Duration</label>
+        <label for="activity-duration">Duration (in hours)</label>
         <InputNumber
           id="activity-duration"
           v-model="modalStore.activityData.duration"

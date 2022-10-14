@@ -21,8 +21,9 @@ function badgeColor(value: number) {
 <style scoped>
 .outcome {
   display: flex;
-  width: 400px;
+  max-width: 400px;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
 }
 </style>

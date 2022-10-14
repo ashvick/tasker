@@ -32,8 +32,7 @@ function deleteActivity(id: string) {
 .column {
   display: flex;
   flex-direction: column;
-  width: 320px;
-  gap: 14px;
+  margin-top: 1rem;
 }
 
 .column-header {
@@ -43,6 +42,5 @@ function deleteActivity(id: string) {
 .activities {
   display: flex;
   flex-direction: column;
-  gap: 14px;
 }
 </style>
