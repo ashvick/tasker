@@ -71,7 +71,7 @@ main {
   padding-top: 3rem;
 }
 .card {
-  min-width: 450px;
+  min-width: 360px;
 
   form {
       margin-top: 2rem;

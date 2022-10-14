@@ -42,15 +42,27 @@ function dropTimeshift(date: Date) {
 </script>
 
 <template>
-    <Dialog header="Describe activity" v-model:visible="modalStore.display" :modal="true">
+    <Dialog header="Describe activity" v-model:visible="modalStore.display" :modal="true" :breakpoints="{ '576px': '80vw' }" :style="{ width: '400px' }" >
         <div class="input-fields">
             <div class="field">
                 <label for="activity-title">Title</label>
-                <InputText id="activity-title" type="text" v-model="modalStore.activityData.title" placeholder="Yoga" />
+                <InputText
+                    id="activity-title"
+                    type="text"
+                    v-model="modalStore.activityData.title"
+                    placeholder="Yoga"
+                    :style="{ width: '100%' }"
+                />
             </div>
             <div class="field">
                 <label for="activity-value">Value</label>
-                <InputNumber id="activity-value" v-model="modalStore.activityData.value" mode="decimal" :useGrouping="false" :min="0" />
+                <InputNumber
+                    id="activity-value"
+                    v-model="modalStore.activityData.value"
+                    mode="decimal"
+                    :useGrouping="false" :min="0"
+                    :style="{ width: '100%' }"
+                />
             </div>
             <div class="field">
                 <label for="activity-duration">Duration</label>
@@ -62,6 +74,7 @@ function dropTimeshift(date: Date) {
                     :minFractionDigits="1"
                     :maxFractionDigits="3"
                     :min="0"
+                    :style="{ width: '100%' }"
                 />
             </div>
             <div v-if="modalStore.edit" class="field">
@@ -79,7 +92,7 @@ function dropTimeshift(date: Date) {
     </Dialog>
 </template>
 
-<style scoped>
+<style>
 .input-fields {
     display: flex;
     flex-direction: column;

@@ -30,7 +30,7 @@ const authStore = useAuthStore();
 header {
   line-height: 1.5;
   max-height: 100vh;
-  max-width:  400px;
+  max-width: 400px;
   min-width: 200px;
 }
 

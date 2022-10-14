@@ -128,7 +128,7 @@ main {
 }
 
 .card {
-  min-width: 450px;
+  min-width: 360px;
 
   form {
     margin-top: 2rem;
