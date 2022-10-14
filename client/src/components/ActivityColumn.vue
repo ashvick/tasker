@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import TheActivity from "./TheActivity.vue";
-import { type Activity, useActivityStore } from '../stores/activity.store';
+import { type Activity, useActivityStore } from "@/stores/activity.store";
 
-const props = defineProps<{
-  header: string,
-  activities: Activity[],
-}>()
+defineProps<{
+  header: string;
+  activities: Activity[];
+}>();
 
 const activityStore = useActivityStore();
 
@@ -18,7 +18,12 @@ function deleteActivity(id: string) {
   <div class="column">
     <h3 class="column-header">{{ header }}</h3>
     <div class="activities">
-      <TheActivity v-for="activity in activities" :activity="activity" @delete="deleteActivity"/>
+      <TheActivity
+        v-for="activity in activities"
+        :activity="activity"
+        :key="activity._id"
+        @delete="deleteActivity"
+      />
     </div>
   </div>
 </template>

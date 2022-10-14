@@ -3,18 +3,18 @@ import { useAuthStore } from "@/stores/auth.store";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import Button from "primevue/button";
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import { reactive, ref } from 'vue';
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import { reactive, ref } from "vue";
 
 const state = reactive({
-  name: '',
-  password: ''
+  name: "",
+  password: "",
 });
 
 const rules = {
-    name: { required },
-    password: { required },
+  name: { required },
+  password: { required },
 };
 
 const submitted = ref(false);
@@ -27,13 +27,11 @@ function handleSubmit(isFormValid: boolean) {
   submitted.value = true;
 
   if (!isFormValid) {
-      return;
+    return;
   }
 
-  authStore.login(state.name, state.password)
-    .catch(error => alert(error));
+  authStore.login(state.name, state.password).catch((error) => alert(error));
 }
-
 </script>
 
 <template>
@@ -41,24 +39,52 @@ function handleSubmit(isFormValid: boolean) {
     <div class="card">
       <h3>Login</h3>
       <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-          <div class="field">
-              <div class="p-float-label">
-                  <InputText id="name" v-model="v$.name.$model" :class="{'p-invalid':v$.name.$invalid && submitted}" />
-                  <label for="name" :class="{'p-error':v$.name.$invalid && submitted}">Name</label>
-              </div>
-              <small v-if="(v$.name.$invalid && submitted) || v$.name.$pending" class="p-error">{{v$.name.required.$message.replace('Value', 'Name')}}</small>
+        <div class="field">
+          <div class="p-float-label">
+            <InputText
+              id="name"
+              v-model="v$.name.$model"
+              :class="{ 'p-invalid': v$.name.$invalid && submitted }"
+            />
+            <label
+              for="name"
+              :class="{ 'p-error': v$.name.$invalid && submitted }"
+              >Name</label
+            >
           </div>
-          <div class="field">
-              <div class="p-float-label">
-                  <Password id="password" v-model="v$.password.$model" :class="{'p-invalid':v$.password.$invalid && submitted}" :feedback="false" toggleMask />
-                  <label for="password" :class="{'p-error':v$.password.$invalid && submitted}">Password</label>
-              </div>
-              <small v-if="(v$.password.$invalid && submitted) || v$.password.$pending" class="p-error">{{v$.password.required.$message.replace('Value', 'Password')}}</small>
+          <small
+            v-if="(v$.name.$invalid && submitted) || v$.name.$pending"
+            class="p-error"
+            >{{ v$.name.required.$message.replace("Value", "Name") }}</small
+          >
+        </div>
+        <div class="field">
+          <div class="p-float-label">
+            <Password
+              id="password"
+              v-model="v$.password.$model"
+              :class="{ 'p-invalid': v$.password.$invalid && submitted }"
+              :feedback="false"
+              toggle-mask
+            />
+            <label
+              for="password"
+              :class="{ 'p-error': v$.password.$invalid && submitted }"
+              >Password</label
+            >
           </div>
-          <Button type="submit" label="Submit" class="button" />
-          <div class="link">
-            <RouterLink to="/register">Create account</RouterLink>
-          </div>
+          <small
+            v-if="(v$.password.$invalid && submitted) || v$.password.$pending"
+            class="p-error"
+            >{{
+              v$.password.required.$message.replace("Value", "Password")
+            }}</small
+          >
+        </div>
+        <Button type="submit" label="Submit" class="button" />
+        <div class="link">
+          <RouterLink to="/register">Create account</RouterLink>
+        </div>
       </form>
     </div>
   </main>
@@ -74,10 +100,10 @@ main {
   min-width: 360px;
 
   form {
-      margin-top: 2rem;
+    margin-top: 2rem;
   }
   .field {
-      margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   .link {
     margin-top: 1rem;
@@ -86,7 +112,7 @@ main {
 
 @media screen and (max-width: 960px) {
   .card {
-      width: 80%;
+    width: 80%;
   }
 }
 </style>
