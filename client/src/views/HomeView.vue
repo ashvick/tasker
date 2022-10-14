@@ -16,9 +16,6 @@ import router from "@/router";
 </template>
 
 <style lang="scss" scoped>
-// main {
-// }
-
 .content {
   margin: 12rem auto 0 auto;
   max-width: 50vw;
