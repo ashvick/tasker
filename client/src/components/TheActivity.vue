@@ -76,12 +76,13 @@ function toggleOverlay(event: any) {
 </template>
 
 <style lang="scss" scoped>
+:deep(.p-card-content) {
+  padding: 0;
+}
+
 @media screen and (max-width: 768px) {
   :deep(.p-card-body) {
     padding: 0.5rem;
-  }
-  :deep(.p-card-content) {
-    padding: 0;
   }
 }
 

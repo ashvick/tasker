@@ -16,7 +16,7 @@ function deleteActivity(id: string) {
 
 <template>
   <div class="column">
-    <h3 class="column-header">{{ header }}</h3>
+    <h2 class="column-header">{{ header }}</h2>
     <div class="activities">
       <TheActivity
         v-for="activity in activities"
@@ -33,9 +33,11 @@ function deleteActivity(id: string) {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
+  color: #495057;
 }
 
 .column-header {
+  margin-bottom: 1rem;
   text-align: center;
 }
 
